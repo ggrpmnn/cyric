@@ -71,3 +71,13 @@ func (i *Input) ParseField(n *html.Node) {
 		}
 	}
 }
+
+// IsInjectable returns true for input fields where text is allowed; false otherwise
+func (i *Input) IsInjectable() bool {
+	switch i.InputType {
+	case "", "text", "password", "email", "url": // for textareas
+		return true
+	default:
+		return false
+	}
+}
