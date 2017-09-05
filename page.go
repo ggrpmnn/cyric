@@ -27,8 +27,8 @@ type Input struct {
 	ReadOnly  bool
 }
 
-//Parse parses a page and adds input fields to the page struct
-func (p *Page) Parse(node *html.Node) {
+//ParseHTML parses a page and adds input fields to the page struct
+func (p *Page) ParseHTML(node *html.Node) {
 	if node.Type == html.ElementNode {
 		switch node.DataAtom {
 		case atom.Title:
@@ -43,9 +43,9 @@ func (p *Page) Parse(node *html.Node) {
 			p.Fields = append(p.Fields, input)
 		}
 	}
-	// recurse down the doc tree
+	// recurse down the document tree
 	for child := node.FirstChild; child != nil; child = child.NextSibling {
-		p.Parse(child)
+		p.ParseHTML(child)
 	}
 }
 

@@ -10,8 +10,7 @@ import (
 
 var (
 	debug     = true
-	targetURL = "http://rbcpc.org/404/"
-	//targetURL = "https://www.lehigh.edu/~inwww/form-test.html"
+	targetURL = "https://www.lehigh.edu/~inwww/form-test.html"
 )
 
 func main() {
@@ -27,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("error parsing HTML response")
 	}
-	page.Parse(doc)
+	page.ParseHTML(doc)
 
 	if debug {
 		for _, f := range page.Fields {
@@ -35,14 +34,5 @@ func main() {
 		}
 	}
 
-	// res, err = http.PostForm(targetURL, params)
-	// if err != nil {
-	// 	log.Fatalln("error posting data back to site")
-	// }
-
-	// data, err := ioutil.ReadAll(res.Body)
-	// if err != nil {
-	// 	log.Fatalln("error reading second response")
-	// }
-	// fmt.Println(string(data))
+	// page struct now contains the list of input fields
 }
