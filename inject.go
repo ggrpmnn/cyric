@@ -8,11 +8,12 @@ import (
 
 // placeholder values
 var (
-	fakeText = "Some placeholder text"
-	fakeNum  = "12457"
-	fakePass = "myP@sw0rD1"
-	fakeMail = "test@test.test"
-	fakeURL  = "http://www.test.net"
+	fakeText   = "Some placeholder text"
+	fakeNum    = "12457"
+	fakePass   = "myP@sw0rD1"
+	fakeMail   = "test@test.test"
+	fakeURL    = "http://www.test.net"
+	injectData = "' OR 1=1; --"
 )
 
 // SetFormValues creates the values to be posted to the target page;
@@ -27,13 +28,13 @@ func SetFormValues(p *Page) (v url.Values) {
 			case "": //textarea
 				fallthrough
 			case "text":
-				v.Add(f.Name, fakeText+"';")
+				v.Add(f.Name, injectData)
 			case "password":
-				v.Add(f.Name, fakePass+"';")
+				v.Add(f.Name, injectData)
 			case "email":
-				v.Add(f.Name, fakeMail+"';")
+				v.Add(f.Name, injectData)
 			case "url":
-				v.Add(f.Name, fakeURL+"';")
+				v.Add(f.Name, injectData)
 			}
 		} else if f.Required {
 			switch f.InputType {
