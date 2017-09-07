@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -24,7 +25,7 @@ func main() {
 	debugOut(fmt.Sprintf("making GET request to '%s'", targetURL))
 	res, err := http.Get(targetURL)
 	if err != nil {
-		log.Fatalln("error making request")
+		log.Fatalln("error making GET request")
 	}
 	defer res.Body.Close()
 
@@ -32,7 +33,7 @@ func main() {
 	page := Page{URL: targetURL}
 	doc, err := html.Parse(res.Body)
 	if err != nil {
-		log.Fatalln("error parsing HTML response")
+		log.Fatalln("error parsing GET response HTML")
 	}
 	page.ParseHTML(doc)
 
@@ -48,10 +49,19 @@ func main() {
 	form := SetFormValues(&page)
 	res, err = http.PostForm(targetURL, form)
 	if err != nil {
-		log.Fatalln("error POSTing data to form")
+		log.Fatalln("error making POST request to form")
 	}
+	defer res.Body.Close()
 
-	// TODO - eval the response
+	// TODO - eval the response; for now, print it out
+	debugOut("printing POST response")
+	if res.Body != nil {
+		bytes, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			log.Fatalln("error parsing POST response body")
+		}
+		fmt.Println(string(bytes))
+	}
 }
 
 // debugOut prints a debug message based on the debug flag state
