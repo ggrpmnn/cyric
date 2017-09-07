@@ -20,6 +20,7 @@ var (
 // data to it; otherwise, if the field is required, we fill it out with
 // appropriate placeholder values
 func SetFormValues(p *Page) (v url.Values) {
+	v = url.Values{}
 	for _, f := range p.Fields {
 		if f.IsInjectable() {
 			switch f.InputType {
