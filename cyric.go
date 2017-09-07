@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 
 	"golang.org/x/net/html"
 )
@@ -44,28 +43,15 @@ func main() {
 		}
 	}
 
-	// Procedure:
-	// 1. Determine which fields must be filled out and which fields
-	//    are text-based ("injectable") and add them to the parameters
-	// 2. Provide data to form fields (valid data for required fields,
-	//    injection/fuzz data for text fields)
-	// 3. POST form to site
-	// 4. ???
-	form := url.Values{}
-	for _, f := range page.Fields {
-		if f.IsInjectable() {
-			form.Add(f.Name, "test") //add injection value
-		} else if f.Required {
-			form.Add(f.Name, "test")
-		}
-	}
-	if debug {
-		log.Println("URL Values:")
-		for k, v := range form {
-			fmt.Printf("'%s': '%s'\n", k, v)
-		}
+	// get values to post to page
+	debugOut("POSTing data to form at " + targetURL)
+	form := SetFormValues(&page)
+	res, err = http.PostForm(targetURL, form)
+	if err != nil {
+		log.Fatalln("error POSTing data to form")
 	}
 
+	// TODO - eval the response
 }
 
 // debugOut prints a debug message based on the debug flag state
